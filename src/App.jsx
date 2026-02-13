@@ -121,13 +121,14 @@ function StatCard({ label, value, icon, trend }) {
 
 function BookingModal({ user, onClose }) {
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState({ eventType: 'Wedding', date: '', guests: 100, thalis: 100, helpers: 5, address: '', menu: [], txnId: '' });
+  const [form, setForm] = useState({ eventType: 'Wedding', date: '', eventTime: '', eventShift: 'Day', phone: '', guests: 100, thalis: 100, helpers: 5, address: '', menu: [], txnId: '' });
   const cost = calculateCost(form.thalis);
 
   const toggle = (item) => setForm(p => ({ ...p, menu: p.menu.includes(item) ? p.menu.filter(i => i !== item) : [...p.menu, item] }));
   
   const submit = async () => {
     if(!form.txnId) return alert("UTR Reference ID required!");
+    if(!form.phone || !form.eventTime) return alert("Phone number and event time are required!");
     try {
       await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'bookings'), {
         ...form, 
@@ -165,6 +166,14 @@ function BookingModal({ user, onClose }) {
                      <label className="text-xs font-black uppercase text-gray-400">Date</label>
                      <input type="date" required className="w-full p-5 bg-gray-50 rounded-2xl font-bold border-none" value={form.date} onChange={e => setForm({...form, date: e.target.value})} />
                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                   <input type="time" required className="p-5 bg-gray-50 rounded-2xl font-bold" value={form.eventTime} onChange={e => setForm({...form, eventTime: e.target.value})} />
+                   <select className="p-5 bg-gray-50 rounded-2xl font-bold border-none" value={form.eventShift} onChange={e => setForm({...form, eventShift: e.target.value})}>
+                      <option value="Day">Day</option>
+                      <option value="Night">Night</option>
+                   </select>
+                   <input type="tel" required placeholder="Client Phone Number" className="p-5 bg-gray-50 rounded-2xl font-bold" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />
                 </div>
                 <div className="grid grid-cols-3 gap-8">
                    <input type="number" placeholder="Guests" className="p-5 bg-gray-50 rounded-2xl font-bold" value={form.guests} onChange={e => setForm({...form, guests: e.target.value})} />
@@ -238,10 +247,12 @@ function BookingDetailModal({ booking, onClose }) {
            <button onClick={onClose}><X size={20}/></button>
         </div>
         <div className="p-10 space-y-8 overflow-y-auto max-h-[70vh]">
-           <div className="p-6 bg-gray-50 rounded-3xl border border-gray-100">
+            <div className="p-6 bg-gray-50 rounded-3xl border border-gray-100">
               <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Client Account</p>
               <p className="font-bold text-gray-900">{booking.customerEmail}</p>
-           </div>
+              <p className="text-sm font-bold text-yellow-700 mt-2">Phone: {booking.phone || "N/A"}</p>
+              <p className="text-xs font-bold text-gray-500 mt-1">Time: {booking.eventTime || "N/A"} | Shift: {booking.eventShift || "N/A"}</p>
+            </div>
            <div className="p-6 bg-yellow-50 rounded-3xl border border-yellow-100">
               <div className="flex items-center gap-2 mb-2 text-yellow-600"><MapPin size={14} /><p className="text-[10px] font-black uppercase tracking-widest">Venue Address</p></div>
               <p className="font-bold text-gray-900 leading-relaxed italic">{booking.address}</p>
@@ -290,6 +301,20 @@ function InvoiceModal({ booking, onClose }) {
             <div className="p-4 bg-gray-50 rounded-2xl">
               <p className="text-[10px] uppercase tracking-widest text-gray-400 font-black">Event Date</p>
               <p className="font-bold text-gray-900 mt-1">{booking.date || "N/A"}</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 bg-gray-50 rounded-2xl">
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 font-black">Phone</p>
+              <p className="font-bold text-gray-900 mt-1">{booking.phone || "N/A"}</p>
+            </div>
+            <div className="p-4 bg-gray-50 rounded-2xl">
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 font-black">Event Time</p>
+              <p className="font-bold text-gray-900 mt-1">{booking.eventTime || "N/A"}</p>
+            </div>
+            <div className="p-4 bg-gray-50 rounded-2xl">
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 font-black">Shift</p>
+              <p className="font-bold text-gray-900 mt-1">{booking.eventShift || "N/A"}</p>
             </div>
           </div>
           <div className="p-5 border rounded-2xl space-y-2">
@@ -938,7 +963,7 @@ function AdminBookingManager({ bookings, staffList, attendance }) {
           <tbody className="divide-y divide-gray-50">
             {bookings.map(b => (
               <tr key={b.id} className="hover:bg-gray-50/30 transition-all duration-300">
-                <td className="p-8"><p className="font-bold text-xl uppercase tracking-tight text-gray-900">{b.eventType}</p><p className="text-xs text-gray-400 mt-1 font-bold uppercase tracking-widest">{b.date} • {b.customerEmail}</p></td>
+                <td className="p-8"><p className="font-bold text-xl uppercase tracking-tight text-gray-900">{b.eventType}</p><p className="text-xs text-gray-400 mt-1 font-bold uppercase tracking-widest">{b.date} | {b.eventTime || "N/A"} | {b.eventShift || "N/A"}</p><p className="text-xs text-gray-500 mt-1 font-bold">{b.customerEmail} | {b.phone || "No Phone"}</p></td>
                 <td className="p-8 text-center"><span className="px-4 py-1 bg-yellow-100 text-yellow-700 rounded-full font-black text-[10px] uppercase tracking-widest">{b.status}</span></td>
                 <td className="p-8 text-right">
                    <div className="flex justify-end gap-3">
