@@ -84,13 +84,13 @@ const copyToClipboard = (text) => {
 
 const CateringLogo = ({ className = "h-12 w-auto", showText = true }) => (
   <div className={`flex items-center gap-3 ${className}`}>
-    <div className="relative flex items-center justify-center w-12 h-12 bg-yellow-500 rounded-xl shadow-lg shadow-yellow-200">
-      <Utensils className="text-white w-7 h-7" />
+    <div className="relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-yellow-500 rounded-xl shadow-lg shadow-yellow-200 flex-shrink-0">
+      <Utensils className="text-white w-6 h-6 sm:w-7 sm:h-7" />
     </div>
     {showText && (
-      <div className="flex flex-col">
-        <span className="font-black text-xl leading-none text-gray-900 tracking-tight text-nowrap">MAA BHAWANI</span>
-        <span className="text-[10px] font-bold text-yellow-600 tracking-[0.2em] uppercase text-nowrap">Catering Services</span>
+      <div className="flex flex-col min-w-0">
+        <span className="font-black text-base sm:text-xl leading-none text-gray-900 tracking-tight whitespace-nowrap">MAA BHAWANI</span>
+        <span className="hidden sm:block text-[10px] font-bold text-yellow-600 tracking-[0.2em] uppercase whitespace-nowrap">Catering Services</span>
       </div>
     )}
   </div>
@@ -199,8 +199,8 @@ function BookingModal({ user, onClose }) {
                    ))}
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 sticky bottom-0 bg-white py-4 border-t">
-                   <button onClick={() => setStep(1)} className="flex-1 py-5 bg-gray-100 rounded-2xl font-black">Back</button>
-                   <button onClick={() => setStep(3)} className="flex-[2] py-5 bg-yellow-500 text-white rounded-2xl font-black shadow-xl">Review & Pay ₹{cost.toLocaleString()}</button>
+                   <button onClick={() => setStep(1)} className="flex-1 py-4 sm:py-5 bg-gray-100 rounded-2xl font-black">Back</button>
+                   <button onClick={() => setStep(3)} className="flex-[2] py-4 sm:py-5 bg-yellow-500 text-white rounded-2xl font-black shadow-xl">Review & Pay ₹{cost.toLocaleString()}</button>
                 </div>
              </div>
            )}
@@ -223,7 +223,7 @@ function BookingModal({ user, onClose }) {
                    </div>
                    <div className="pt-6 border-t border-white/10 flex justify-between items-center">
                       <p className="text-xs uppercase font-black opacity-40">Total Amount</p>
-                      <p className="text-4xl font-black text-yellow-400">₹{cost.toLocaleString()}</p>
+                      <p className="text-3xl sm:text-4xl font-black text-yellow-400">₹{cost.toLocaleString()}</p>
                    </div>
                 </div>
                 <div className="max-w-md mx-auto space-y-4">
@@ -271,7 +271,7 @@ function BookingDetailModal({ booking, onClose }) {
         </div>
         <div className="p-5 md:p-8 border-t flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between sm:items-center bg-gray-50">
            <div><p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Net Value</p><p className="text-2xl font-black text-gray-900">₹{Number(booking.totalCost || 0).toLocaleString()}</p></div>
-           <button onClick={onClose} className="px-10 py-4 bg-gray-900 text-white rounded-2xl font-black">Close</button>
+           <button onClick={onClose} className="px-6 sm:px-10 py-4 bg-gray-900 text-white rounded-2xl font-black w-full sm:w-auto">Close</button>
         </div>
       </div>
     </div>
@@ -409,7 +409,7 @@ function StaffAssignmentModal({ booking, staffList, attendance, onClose }) {
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-md">
       <div className="bg-white w-full max-w-6xl rounded-3xl md:rounded-[60px] h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-in zoom-in-95">
         <div className="bg-gray-900 p-5 md:p-10 text-white flex justify-between items-center gap-3">
-           <div><h2 className="text-3xl font-black uppercase tracking-tight">{booking.eventType} / Roster</h2><p className="text-gray-400 mt-1 font-medium">{booking.date} • Needs {booking.helpers} Workers</p></div>
+           <div><h2 className="text-xl sm:text-3xl font-black uppercase tracking-tight">{booking.eventType} / Roster</h2><p className="text-gray-400 mt-1 text-sm sm:text-base font-medium">{booking.date} • Needs {booking.helpers} Workers</p></div>
            <button onClick={onClose}><X size={32}/></button>
         </div>
         <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
@@ -438,7 +438,7 @@ function StaffAssignmentModal({ booking, staffList, attendance, onClose }) {
               <h3 className="text-[10px] font-black opacity-40 uppercase tracking-widest mb-8 tracking-[0.2em]">Mark Attendance</h3>
               {currentAtt.map(a => (
                  <div key={a.id} className="bg-white p-5 md:p-8 rounded-3xl md:rounded-[40px] border border-gray-100 shadow-sm space-y-6">
-                    <div className="flex justify-between items-center"><p className="font-bold text-2xl text-gray-900 tracking-tighter">{a.staffName}</p><div className={`w-3 h-3 rounded-full ${a.status === 'Present' ? 'bg-green-500 shadow-lg shadow-green-200' : 'bg-red-500 shadow-lg shadow-red-200'}`}></div></div>
+                    <div className="flex justify-between items-center gap-3"><p className="font-bold text-xl sm:text-2xl text-gray-900 tracking-tighter break-words">{a.staffName}</p><div className={`w-3 h-3 rounded-full ${a.status === 'Present' ? 'bg-green-500 shadow-lg shadow-green-200' : 'bg-red-500 shadow-lg shadow-red-200'}`}></div></div>
                     <div className="flex gap-3">
                        <button onClick={() => setStatus(a.id, 'Present')} className={`flex-1 py-4 rounded-2xl font-black text-[10px] uppercase transition-all ${a.status === 'Present' ? 'bg-green-500 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200'}`}>Present</button>
                        <button onClick={() => setStatus(a.id, 'Absent')} className={`flex-1 py-4 rounded-2xl font-black text-[10px] uppercase transition-all ${a.status === 'Absent' ? 'bg-red-500 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200'}`}>Absent</button>
@@ -465,12 +465,12 @@ function StaffDetailModal({ staff, bookings, onClose }) {
     <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-md">
       <div className="bg-white w-full max-w-3xl rounded-3xl md:rounded-[60px] overflow-hidden shadow-2xl h-[80vh] flex flex-col animate-in zoom-in-95">
         <div className="p-5 md:p-12 bg-yellow-500 text-white flex justify-between items-start gap-3">
-           <div><h2 className="text-3xl md:text-5xl font-black mb-2 tracking-tighter break-words">{staff.name}</h2><p className="font-black text-yellow-100 uppercase tracking-widest text-xs">{staff.role}</p></div>
+           <div><h2 className="text-2xl sm:text-3xl md:text-5xl font-black mb-2 tracking-tighter break-words">{staff.name}</h2><p className="font-black text-yellow-100 uppercase tracking-widest text-xs">{staff.role}</p></div>
            <button onClick={onClose}><X size={32}/></button>
         </div>
         <div className="p-4 md:p-10 grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-8 bg-gray-50/50 border-b">
-           <div className="bg-white p-6 rounded-[30px] border border-gray-100 text-center"><p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Life Earnings</p><p className="text-4xl font-black text-gray-900">₹{staff.stats.earned.toLocaleString()}</p></div>
-           <div className="bg-white p-6 rounded-[30px] border border-red-50 text-center"><p className="text-[10px] font-black uppercase text-red-500 tracking-widest mb-1">Pending Amount</p><p className="text-4xl font-black text-red-500">₹{staff.stats.pending.toLocaleString()}</p></div>
+           <div className="bg-white p-6 rounded-[30px] border border-gray-100 text-center"><p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Life Earnings</p><p className="text-3xl sm:text-4xl font-black text-gray-900">₹{staff.stats.earned.toLocaleString()}</p></div>
+           <div className="bg-white p-6 rounded-[30px] border border-red-50 text-center"><p className="text-[10px] font-black uppercase text-red-500 tracking-widest mb-1">Pending Amount</p><p className="text-3xl sm:text-4xl font-black text-red-500">₹{staff.stats.pending.toLocaleString()}</p></div>
         </div>
         <div className="flex-1 overflow-y-auto p-4 md:p-12 space-y-4">
           <h3 className="text-xs font-black uppercase text-gray-400 mb-6 tracking-widest">Payroll Logs</h3>
@@ -565,18 +565,18 @@ function LandingPage({ sessionUser, reviews, onAction, onGoToPortal }) {
          )}
       </nav>
 
-      <section className="relative pt-32 sm:pt-36 pb-24 px-6 md:px-10 overflow-hidden bg-gradient-to-b from-yellow-50 via-white to-white">
+      <section className="relative pt-28 sm:pt-36 pb-16 sm:pb-24 px-4 sm:px-6 md:px-10 overflow-hidden bg-gradient-to-b from-yellow-50 via-white to-white">
         <div className="absolute -top-20 -left-20 w-72 h-72 bg-yellow-200/40 blur-3xl rounded-full"></div>
         <div className="absolute top-8 right-0 w-72 h-72 bg-orange-100/60 blur-3xl rounded-full"></div>
-        <div className="relative max-w-6xl mx-auto text-center space-y-10">
+        <div className="relative max-w-6xl mx-auto text-center space-y-7 sm:space-y-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-yellow-200 text-[11px] font-black uppercase tracking-[0.2em] text-yellow-700 shadow-sm">
             <Sparkles size={14} /> Trusted Since 2018
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tighter leading-tight">Authentic Taste. <br/><span className="text-yellow-500">Professional Service.</span></h1>
-          <p className="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto font-medium leading-relaxed">Wardha and Nagpur's premier choice for traditional catering with disciplined service and elegant presentation.</p>
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-gray-900 tracking-tighter leading-tight">Authentic Taste. <br/><span className="text-yellow-500">Professional Service.</span></h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-500 max-w-2xl mx-auto font-medium leading-relaxed">Wardha and Nagpur's premier choice for traditional catering with disciplined service and elegant presentation.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button onClick={() => sessionUser ? onGoToPortal() : onAction('register')} className="px-10 py-5 bg-gray-900 text-white rounded-[24px] font-black text-lg shadow-2xl hover:scale-105 transition-all">Book Your Event</button>
-            <a href="#menu" className="px-10 py-5 bg-white border border-gray-200 text-gray-900 rounded-[24px] font-black text-lg hover:border-yellow-400 hover:text-yellow-700 transition-all">Explore Menu</a>
+            <button onClick={() => sessionUser ? onGoToPortal() : onAction('register')} className="px-6 sm:px-10 py-4 sm:py-5 bg-gray-900 text-white rounded-2xl sm:rounded-[24px] font-black text-base sm:text-lg shadow-2xl hover:scale-105 transition-all">Book Your Event</button>
+            <a href="#menu" className="px-6 sm:px-10 py-4 sm:py-5 bg-white border border-gray-200 text-gray-900 rounded-2xl sm:rounded-[24px] font-black text-base sm:text-lg hover:border-yellow-400 hover:text-yellow-700 transition-all">Explore Menu</a>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-6">
             <div className="p-5 bg-white/90 border border-gray-100 rounded-2xl shadow-sm"><p className="text-3xl font-black text-gray-900">50+</p><p className="text-[11px] uppercase tracking-widest font-black text-gray-400">Events Served</p></div>
@@ -586,28 +586,28 @@ function LandingPage({ sessionUser, reviews, onAction, onGoToPortal }) {
         </div>
       </section>
 
-      <section className="py-24 px-6 md:px-10 max-w-7xl mx-auto space-y-12">
-        <h2 className="text-4xl font-black text-center uppercase tracking-tight">Services</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-           <div className="p-10 bg-white border border-gray-100 rounded-[40px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all text-center">
+      <section className="py-16 sm:py-24 px-4 sm:px-6 md:px-10 max-w-7xl mx-auto space-y-8 sm:space-y-12">
+        <h2 className="text-3xl sm:text-4xl font-black text-center uppercase tracking-tight">Services</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-8">
+           <div className="p-6 sm:p-10 bg-white border border-gray-100 rounded-3xl sm:rounded-[40px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all text-center">
               <Heart size={40} className="text-yellow-500 mb-6 mx-auto"/><h3 className="text-2xl font-bold mb-4">Weddings</h3><p className="text-gray-500">Traditional grand feasts.</p>
            </div>
-           <div className="p-10 bg-white border border-gray-100 rounded-[40px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all text-center">
+           <div className="p-6 sm:p-10 bg-white border border-gray-100 rounded-3xl sm:rounded-[40px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all text-center">
               <Star size={40} className="text-yellow-500 mb-6 mx-auto"/><h3 className="text-2xl font-bold mb-4">Birthdays</h3><p className="text-gray-500">Tasty menus for all ages.</p>
            </div>
-           <div className="p-10 bg-white border border-gray-100 rounded-[40px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all text-center">
+           <div className="p-6 sm:p-10 bg-white border border-gray-100 rounded-3xl sm:rounded-[40px] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all text-center">
               <Award size={40} className="text-yellow-500 mb-6 mx-auto"/><h3 className="text-2xl font-bold mb-4">Corporate</h3><p className="text-gray-500">Professional buffet service.</p>
            </div>
         </div>
       </section>
 
-      <section id="menu" className="py-24 px-6 md:px-10 bg-gray-50">
-        <div className="max-w-7xl mx-auto space-y-12">
-           <h2 className="text-4xl font-black uppercase tracking-tight">Signature Menu</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section id="menu" className="py-16 sm:py-24 px-4 sm:px-6 md:px-10 bg-gray-50">
+        <div className="max-w-7xl mx-auto space-y-8 sm:space-y-12">
+           <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-tight">Signature Menu</h2>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
               {Object.entries(MENU_DATA).map(([cat, items]) => (
-                <div key={cat} className="p-8 bg-white rounded-[40px] shadow-sm space-y-6">
-                   <h4 className="text-xl font-black text-yellow-600 uppercase tracking-widest border-b pb-2">{cat}</h4>
+                <div key={cat} className="p-6 sm:p-8 bg-white rounded-3xl sm:rounded-[40px] shadow-sm space-y-5 sm:space-y-6">
+                   <h4 className="text-lg sm:text-xl font-black text-yellow-600 uppercase tracking-widest border-b pb-2">{cat}</h4>
                    <div className="flex flex-wrap gap-2">
                       {items.map(it => <span key={it} className="px-3 py-1 bg-gray-50 text-gray-500 rounded-lg text-xs font-bold uppercase">{it}</span>)}
                    </div>
@@ -617,21 +617,21 @@ function LandingPage({ sessionUser, reviews, onAction, onGoToPortal }) {
         </div>
       </section>
 
-      <section className="py-24 px-6 md:px-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
-         <div className="space-y-12">
-            <h2 className="text-5xl font-black">Guest Experiences</h2>
+      <section className="py-16 sm:py-24 px-4 sm:px-6 md:px-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-20">
+         <div className="space-y-8 sm:space-y-12">
+            <h2 className="text-3xl sm:text-5xl font-black">Guest Experiences</h2>
             <div className="space-y-6">
                {reviews.slice(0, 3).map(r => (
-                 <div key={r.id} className="p-8 bg-gray-50 rounded-[40px] border border-gray-100 shadow-sm italic">
+                 <div key={r.id} className="p-5 sm:p-8 bg-gray-50 rounded-3xl sm:rounded-[40px] border border-gray-100 shadow-sm italic">
                     <div className="flex gap-1 text-yellow-500 mb-4">{[...Array(r.rating)].map((_, i) => <Star key={i} size={16} fill="currentColor"/>)}</div>
-                    <p className="text-lg font-medium text-gray-700">"{r.comment}"</p>
+                    <p className="text-base sm:text-lg font-medium text-gray-700 break-words">"{r.comment}"</p>
                     <p className="mt-4 font-black uppercase tracking-widest text-[10px] text-gray-400">— {r.name}</p>
                  </div>
                ))}
             </div>
          </div>
-         <div className="bg-white p-12 rounded-[60px] shadow-2xl border border-gray-100">
-            <h3 className="text-2xl font-black mb-8 uppercase tracking-widest">Share Feedback</h3>
+         <div className="bg-white p-6 sm:p-12 rounded-3xl sm:rounded-[60px] shadow-2xl border border-gray-100">
+            <h3 className="text-xl sm:text-2xl font-black mb-6 sm:mb-8 uppercase tracking-widest">Share Feedback</h3>
             <form onSubmit={submitReview} className="space-y-4">
                <input type="text" placeholder="Name" required value={reviewName} onChange={e => setReviewName(e.target.value)} className="w-full p-5 bg-gray-50 rounded-2xl border-none outline-none font-bold" />
                <div className="flex items-center gap-4 p-5 bg-gray-50 rounded-2xl">
@@ -648,17 +648,17 @@ function LandingPage({ sessionUser, reviews, onAction, onGoToPortal }) {
          </div>
       </section>
 
-      <footer id="about" className="py-24 px-6 md:px-10 bg-gray-900 text-white rounded-t-[60px]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20">
+      <footer id="about" className="py-16 sm:py-24 px-4 sm:px-6 md:px-10 bg-gray-900 text-white rounded-t-3xl sm:rounded-t-[60px]">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-20">
            <div className="space-y-8">
-              <h2 className="text-4xl font-black uppercase tracking-widest">Contact</h2>
+              <h2 className="text-3xl sm:text-4xl font-black uppercase tracking-widest">Contact</h2>
               <div className="space-y-6">
                  <div className="flex gap-4 items-start"><MapPin className="text-yellow-500 flex-shrink-0" /><p className="text-lg font-bold">At Post Virul (aa), Tah-Arvi, Dist-Wardha</p></div>
                  <div className="flex gap-4 items-center"><Phone className="text-yellow-500 flex-shrink-0" /><p className="text-lg font-bold">7875822105</p></div>
               </div>
            </div>
-           <div className="flex flex-col items-center justify-center p-12 border-2 border-white/10 rounded-[50px] text-center opacity-40">
-              <Utensils size={80} className="mb-6" /><p className="font-black uppercase tracking-[0.4em]">Official App</p>
+           <div className="flex flex-col items-center justify-center p-8 sm:p-12 border-2 border-white/10 rounded-3xl sm:rounded-[50px] text-center opacity-40">
+              <Utensils size={64} className="mb-6" /><p className="font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-xs sm:text-base">Official App</p>
            </div>
         </div>
       </footer>
@@ -887,7 +887,7 @@ export default function App() {
   return (
     <div className="flex flex-col md:flex-row min-h-screen md:h-screen bg-gray-50 overflow-visible md:overflow-hidden">
       <aside className="w-full md:w-72 bg-white border-r border-gray-100 p-4 sm:p-8 flex flex-col shadow-sm">
-        <div className="mb-12"><CateringLogo /></div>
+        <div className="mb-6 sm:mb-12"><CateringLogo /></div>
         <nav className="flex-1 space-y-2">
           <SidebarItem active={view === 'dashboard'} onClick={() => setView('dashboard')} icon={<LayoutDashboard size={20}/>} label="Dashboard" />
           {isAdmin && (
@@ -901,7 +901,7 @@ export default function App() {
         <div className="mt-auto pt-6 border-t">
           <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Active User</p>
           <p className="text-xs font-bold text-gray-700 truncate mb-4">{sessionUser?.email}</p>
-          <button onClick={handleLogout} className="flex items-center gap-3 p-4 w-full text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all font-bold"><LogOut size={20}/> <span>Sign Out</span></button>
+          <button onClick={handleLogout} className="flex items-center justify-center sm:justify-start gap-3 p-4 w-full text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all font-bold"><LogOut size={20}/> <span>Sign Out</span></button>
         </div>
       </aside>
       <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-12">
@@ -926,7 +926,7 @@ function UserDashboard({ user, bookings }) {
       </div>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
         {bookings.length === 0 ? (
-          <div className="col-span-full py-40 border-2 border-dashed rounded-[60px] text-center text-gray-300 font-black uppercase tracking-widest">No active bookings found</div>
+          <div className="col-span-full py-20 sm:py-40 border-2 border-dashed rounded-3xl sm:rounded-[60px] text-center text-gray-300 font-black uppercase tracking-widest">No active bookings found</div>
         ) : (
           bookings.map(b => (
             <div key={b.id} className="bg-white p-6 md:p-10 rounded-3xl md:rounded-[50px] shadow-sm border border-gray-100 space-y-6 group hover:shadow-xl transition-all">
