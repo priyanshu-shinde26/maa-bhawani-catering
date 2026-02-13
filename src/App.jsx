@@ -212,14 +212,14 @@ function BookingModal({ user, onClose }) {
                         <p className="text-[10px] uppercase font-black opacity-40">Official UPI ID</p>
                         <button onClick={() => copyToClipboard('7875822105-de92@axl')} className="text-yellow-400 hover:scale-110 transition-all"><Copy size={14}/></button>
                       </div>
-                      <p className="font-mono font-bold text-xl">7875822105-de92@axl</p>
+                      <p className="font-mono font-bold text-base sm:text-xl break-all">7875822105-de92@axl</p>
                    </div>
                    <div className="p-5 bg-white/5 rounded-3xl border border-white/10">
                       <div className="flex justify-between items-center mb-1">
                         <p className="text-[10px] uppercase font-black opacity-40">PhonePe Number</p>
                         <button onClick={() => copyToClipboard('7875822105')} className="text-yellow-400 hover:scale-110 transition-all"><Copy size={14}/></button>
                       </div>
-                      <p className="font-mono font-bold text-xl">7875822105</p>
+                      <p className="font-mono font-bold text-base sm:text-xl break-all">7875822105</p>
                    </div>
                    <div className="pt-6 border-t border-white/10 flex justify-between items-center">
                       <p className="text-xs uppercase font-black opacity-40">Total Amount</p>
@@ -249,7 +249,7 @@ function BookingDetailModal({ booking, onClose }) {
         <div className="p-4 md:p-10 space-y-8 overflow-y-auto max-h-[70vh]">
             <div className="p-6 bg-gray-50 rounded-3xl border border-gray-100">
               <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">Client Account</p>
-              <p className="font-bold text-gray-900">{booking.customerEmail}</p>
+              <p className="font-bold text-gray-900 break-all">{booking.customerEmail}</p>
               <p className="text-sm font-bold text-yellow-700 mt-2">Phone: {booking.phone || "N/A"}</p>
               <p className="text-xs font-bold text-gray-500 mt-1">Time: {booking.eventTime || "N/A"} | Shift: {booking.eventShift || "N/A"}</p>
             </div>
@@ -978,7 +978,26 @@ function AdminBookingManager({ bookings, staffList, attendance }) {
   return (
     <div className="space-y-12">
       <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">All Orders</h2>
-      <div className="bg-white rounded-3xl md:rounded-[50px] border overflow-hidden shadow-sm">
+      <div className="md:hidden space-y-4">
+        {bookings.map(b => (
+          <div key={b.id} className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="font-bold text-xl uppercase tracking-tight text-gray-900 break-words">{b.eventType}</p>
+                <p className="text-xs text-gray-400 mt-1 font-bold uppercase tracking-widest break-words">{b.date} | {b.eventTime || "N/A"} | {b.eventShift || "N/A"}</p>
+                <p className="text-xs text-gray-500 mt-1 font-bold break-all">{b.customerEmail} | {b.phone || "No Phone"}</p>
+              </div>
+              <span className="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full font-black text-[10px] uppercase tracking-widest whitespace-nowrap">{b.status}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <button onClick={() => setDetail(b)} className="py-3 bg-gray-100 rounded-xl flex items-center justify-center"><Info size={18}/></button>
+              {b.paymentStatus !== 'verified' ? <button onClick={() => verify(b.id)} className="py-3 bg-yellow-500 text-white rounded-xl font-black text-[10px] uppercase">Verify</button> : <div className="py-3 bg-green-50 text-green-600 rounded-xl font-black text-[10px] uppercase text-center">Verified</div>}
+              <button onClick={() => setActive(b)} className="py-3 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center"><Users2 size={18}/></button>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="hidden md:block bg-white rounded-3xl md:rounded-[50px] border overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
         <table className="w-full text-left min-w-[760px]">
           <thead className="bg-gray-50/50 border-b">
@@ -1032,7 +1051,35 @@ function StaffManagement({ staffList, attendance, bookings }) {
              <button onClick={enroll} className="px-8 py-4 sm:py-5 bg-gray-900 text-white font-black rounded-3xl uppercase text-xs">Enroll</button>
           </div>
        </div>
-       <div className="bg-white rounded-3xl md:rounded-[50px] shadow-sm border overflow-hidden">
+       <div className="md:hidden space-y-4">
+          {staffList.map(s => {
+             const att = attendance.filter(a => a.staffId === s.id);
+             const earned = att.reduce((sum, a) => sum + (a.status === 'Present' ? (a.paymentAmount || HELPER_RATE) : 0), 0);
+             const pending = att.reduce((sum, a) => sum + (a.status === 'Present' && !a.isPaid ? (a.paymentAmount || HELPER_RATE) : 0), 0);
+             return (
+               <div key={s.id} className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm space-y-3">
+                 <div className="flex items-start justify-between gap-3">
+                   <div className="min-w-0">
+                     <p className="font-bold text-xl text-gray-900 break-words">{s.name}</p>
+                     <p className="text-[10px] text-gray-400 uppercase font-black">{s.role}</p>
+                   </div>
+                   <button onClick={() => setSelected({...s, stats: {earned, pending, history: att}})} className="px-4 py-2 rounded-xl border-2 text-yellow-600 font-black text-[10px] uppercase whitespace-nowrap">Details</button>
+                 </div>
+                 <div className="grid grid-cols-2 gap-3">
+                   <div className="p-3 rounded-2xl bg-gray-50 text-center">
+                     <p className="text-lg font-black text-gray-900">{att.filter(a => a.status === 'Present').length}</p>
+                     <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Events</p>
+                   </div>
+                   <div className="p-3 rounded-2xl bg-gray-50 text-center">
+                     <p className="text-lg font-black text-gray-900">₹{earned.toLocaleString()}</p>
+                     <p className="text-[10px] font-black text-red-500 uppercase">₹{pending.toLocaleString()} Due</p>
+                   </div>
+                 </div>
+               </div>
+             );
+          })}
+       </div>
+       <div className="hidden md:block bg-white rounded-3xl md:rounded-[50px] shadow-sm border overflow-hidden">
           <div className="overflow-x-auto">
           <table className="w-full text-left min-w-[760px]">
              <thead className="bg-gray-50/50 border-b">
